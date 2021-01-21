@@ -1,4 +1,5 @@
-[debug] not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/C:/Users/quent/Desktop/Informatique/ESGI/4eme%20année/1er%20semestre/Spark/Partiel/Spark-Netflix/"), "spark-netflix")...
-[debug] Done updating ProjectRef(uri("file:/C:/Users/quent/Desktop/Informatique/ESGI/4eme%20année/1er%20semestre/Spark/Partiel/Spark-Netflix/"), "spark-netflix")
+[warn] scala-library-2.11.12-sources.jar no longer exists at C:\Users\quent\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.11.12\scala-library-2.11.12-sources.jar
+[debug] not up to date. inChanged = false, force = false
+[debug] Updating ProjectRef(uri("file:/D:/Programmation/GITHUB/Spark-Netflix/"), "spark-netflix")...
+[debug] Done updating ProjectRef(uri("file:/D:/Programmation/GITHUB/Spark-Netflix/"), "spark-netflix")
 [warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.
