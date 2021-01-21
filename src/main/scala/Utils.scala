@@ -11,8 +11,8 @@ object Utils {
   def fieldToList(df: DataFrame, col : Int): Dataset[(String,List[String])]  = {
     val dataset : Dataset[(String,List[String])] = netflixDF.map{
       row => {
-        if(row != null && row.get(0) != null && row.get(4) != null)
-          (row.getString(0), row.getString(4).split(',').toList)
+        if(row != null && row.get(0) != null && row.get(col) != null)
+          (row.getString(0), row.getString(col).split(',').toList)
         else
           ("-1",List())
       }

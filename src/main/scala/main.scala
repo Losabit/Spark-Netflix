@@ -1,5 +1,6 @@
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import Utils._
+
 object main extends App {
   // Defining the spark Session
   val spark = SparkSession
@@ -14,7 +15,14 @@ object main extends App {
   // Reading the DataFrame from source File
   val netflixDF = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
   println(netflixDF.printSchema())
-  Utils.fieldToList(netflixDF, 4).show(20)
+
+  val dataset :  Dataset[(String,List[String])] = Utils.fieldToList(netflixDF, 3)
+  //.withColumnRenamed("_1", "id").withColumnRenamed("_2", "director")
+  import spark.implicits._
+  dataset.flatMap({
+    case(key, value) => value.map(v => (key,v))
+  }).show(1000)
+
 /*
   println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
   println(mostDirector(netflixDF))
