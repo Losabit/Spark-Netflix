@@ -1,12 +1,24 @@
-import main.spark
-import org.apache.spark.sql.{DataFrame, Row}
+import main.{netflixDF, spark}
+import org.apache.spark.sql.{DataFrame, Dataset, Row}
 import org.apache.spark.sql.functions.desc
+import spark.implicits._
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 
 import scala.::
 
 
 object Utils {
+  def fieldToList(df: DataFrame, col : Int): Dataset[(String,List[String])]  = {
+    val dataset : Dataset[(String,List[String])] = netflixDF.map{
+      row => {
+        if(row != null && row.get(0) != null && row.get(4) != null)
+          (row.getString(0), row.getString(4).split(',').toList)
+        else
+          ("-1",List())
+      }
+    }
+    dataset
+  }
 
   def divideCommas(column: String,df: DataFrame,dfColumns: Array[String]) : DataFrame = {
     df.foreach(row => {
