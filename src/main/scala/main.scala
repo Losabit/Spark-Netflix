@@ -1,5 +1,7 @@
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.catalyst.dsl.expressions.StringToAttributeConversionHelper
+import org.apache.spark.sql.functions.{lit, mean, regexp_replace}
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import NetflixData._
 
 object main extends App {
   // Defining the spark Session
@@ -13,8 +15,14 @@ object main extends App {
   spark.sparkContext.setLogLevel("ERROR")
 
   // Reading the DataFrame from source File
-  val stackDF = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
-  println(stackDF.toString())
+  val netflixDF = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
+  println(netflixDF.toString())
 
+  var netflixData = new NetflixData()
   // TODO :)
+
+
+  // MOYENNE Duree Film / Serie
+  println(netflixData.averageShowDuration(netflixData.showTypes(1),netflixDF))
+
 }
