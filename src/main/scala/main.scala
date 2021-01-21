@@ -16,6 +16,8 @@ object main extends App {
   println(netflixDF.printSchema())
 
   // TODO :)
-  println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
-  println(mostDirector(netflixDF))
+  //println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
+  //println(mostDirector(netflixDF))
+
+  println(divideCommas("director",netflixDF,netflixDF.columns))
 }

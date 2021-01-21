@@ -1,9 +1,12 @@
 import java.util.Dictionary
+
 import main.{netflixDF, spark}
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.desc
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
+
+import scala.::
 
 
 object Utils {
@@ -17,31 +20,34 @@ object Utils {
     result
   }
 
-  def divideCommas(column: String,df: DataFrame) : DataFrame = {
+  def divideCommas(column: String,df: DataFrame,dfColumns: Array[String]) : DataFrame = {
     df.foreach(row => {
-      if(row.getAs[String](column).contains(",")){
-        val columnToReinsert = row.getAs[String](column).split(",")
+      val columnToDivide = row.getAs[String](column)
+      if(columnToDivide != null && columnToDivide.contains(",")){
+        val columnToReinsert = columnToDivide.split(",")
         columnToReinsert.foreach(el => {
 
-          val columnVal = List.empty[String]
+          var columnVal = Seq[String]()
 
-          df.columns.foreach(col => {
+          dfColumns.foreach(col => {
             if(col != column){
-              columnVal :+ row.getAs[String](col)
+              columnVal = columnVal :+ row.getAs[String](col)
             }else{
-              columnVal :+ row.getAs[String](el)
+              columnVal = columnVal :+ el
             }
           })
 
-          val schema = StructType(
-            df.columns.map(fieldName => StructField(fieldName, StringType,true))
-           )
+          import spark.implicits._
+          var lineToInsert = columnVal.toDF(
+            "show_id", "type", "title", "director", "cast", "country", "date_added",
+              "release_year", "rating", "duration", "listed_in", "description"
+          )
 
-          val lineToInsertRdd = spark.sparkContext.parallelize(columnVal)
-          df.union(spark.createDataFrame(lineToInsertRdd,schema))
+          df.union(lineToInsert)
         })
       }
     })
+    df
   }
 
   def mostCountry(df : DataFrame): String = {
