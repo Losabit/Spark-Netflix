@@ -1,4 +1,5 @@
-import org.apache.spark.sql.{SparkSession}
+import Utils._
+import org.apache.spark.sql.SparkSession
 
 
 object main extends App {
@@ -17,7 +18,6 @@ object main extends App {
   println(netflixDF.printSchema())
 
   // TODO :)
-
-  // MOYENNE Duree Film / Serie
   println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
+  println(mostDirector(netflixDF))
 }
