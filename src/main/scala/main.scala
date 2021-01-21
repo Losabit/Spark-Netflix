@@ -1,4 +1,3 @@
-import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
 object main extends App {
@@ -18,6 +17,7 @@ object main extends App {
     "release_year", "rating", "duration", "listed_in", "description")
   val stackDF = stackDF_unamed.toDF(dfColumnsName.seq:_*)
   println(stackDF.printSchema())
-  println(stackDF.where("type = 'TV Show'").show(20))
   // TODO :)
+
+
 }
