@@ -18,6 +18,4 @@ object main extends App {
   val stackDF = stackDF_unamed.toDF(dfColumnsName.seq:_*)
   println(stackDF.printSchema())
   // TODO :)
-
-
 }
