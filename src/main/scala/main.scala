@@ -16,13 +16,9 @@ object main extends App {
   val netflixDF = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
   println(netflixDF.printSchema())
 
-  val dataset :  Dataset[(String,List[String])] = Utils.fieldToList(netflixDF, 3)
+  val dataset :  Dataset[(String,String)] = Utils.fieldToList(netflixDF, 5)
   //.withColumnRenamed("_1", "id").withColumnRenamed("_2", "director")
-  import spark.implicits._
-  dataset.flatMap({
-    case(key, value) => value.map(v => (key,v))
-  }).show(1000)
-
+  println(mostElem(dataset,"country"))
 /*
   println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
   println(mostDirector(netflixDF))
