@@ -1,22 +1,14 @@
 import java.util.Dictionary
+
 import main.{netflixDF, spark}
 import org.apache.spark.SparkContext
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.functions.desc
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 
 
 object Utils {
-  def compare_type(df : DataFrame) : List[(String, Long)] = {
-    var result : List[(String, Long)] = List()
-    val typesDF = netflixDF.select(netflixDF("type")).distinct
-    for(i <- 0 to typesDF.count.asInstanceOf[Int] - 1) {
-      val typeToSearch = typesDF.collectAsList().get(i).getString(0)
-      result = result :+ ((typeToSearch,  df.where("type = '" + typeToSearch + "'").count()))
-    }
-    result
-  }
-
   def divideCommas(column: String,df: DataFrame) : DataFrame = {
     df.foreach(row => {
       if(row.getAs[String](column).contains(",")){
@@ -24,12 +16,13 @@ object Utils {
         columnToReinsert.foreach(el => {
 
           val columnVal = List.empty[String]
-
+          df.printSchema()
+          df.show(20)
           df.columns.foreach(col => {
             if(col != column){
               columnVal :+ row.getAs[String](col)
             }else{
-              columnVal :+ row.getAs[String](el)
+              columnVal :+ el
             }
           })
 
@@ -38,10 +31,15 @@ object Utils {
            )
 
           val lineToInsertRdd = spark.sparkContext.parallelize(columnVal)
-          df.union(spark.createDataFrame(lineToInsertRdd,schema))
+
+          val row2ToInsertRdd : RDD[Row] = lineToInsertRdd.map(line =>
+            Row.fromSeq(line.split(','))
+          )
+          //df.union(spark.createDataFrame(,schema))
         })
       }
     })
+    df
   }
 
   def mostCountry(df : DataFrame): String = {

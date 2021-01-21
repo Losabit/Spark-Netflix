@@ -1,4 +1,4 @@
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import Utils._
 object main extends App {
   // Defining the spark Session
@@ -14,8 +14,12 @@ object main extends App {
   // Reading the DataFrame from source File
   val netflixDF = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
   println(netflixDF.printSchema())
+  //divideCommas(4, netflixDF)
 
   // TODO :)
+/*
   println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
   println(mostDirector(netflixDF))
+  println(NetflixData.typeIteration(netflixDF))
+ */
 }

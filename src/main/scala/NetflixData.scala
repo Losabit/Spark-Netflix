@@ -16,4 +16,12 @@ object NetflixData {
     }
     showDF.select(mean(showDF("duration2"))).first().getDouble(0)
   }
+
+  def typeIteration(df : DataFrame) : List[(String, Long)] = {
+    var result : List[(String, Long)] = List()
+    for(showType <- showTypes) {
+      result = result :+ ((showType,  df.where("type = '" + showType + "'").count()))
+    }
+    result
+  }
 }
