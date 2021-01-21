@@ -13,8 +13,11 @@ object main extends App {
   spark.sparkContext.setLogLevel("ERROR")
 
   // Reading the DataFrame from source File
-  val stackDF = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
-  println(stackDF.toString())
-
+  val stackDF_unamed = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
+  val dfColumnsName = Seq("show_id", "type", "title", "director", "cast", "country", "date_added",
+    "release_year", "rating", "duration", "listed_in", "description")
+  val stackDF = stackDF_unamed.toDF(dfColumnsName.seq:_*)
+  println(stackDF.printSchema())
+  println(stackDF.where("type = 'TV Show'").show(20))
   // TODO :)
 }
