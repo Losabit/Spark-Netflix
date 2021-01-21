@@ -1,4 +1,5 @@
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession}
+
 
 object main extends App {
   // Defining the spark Session
@@ -12,10 +13,9 @@ object main extends App {
   spark.sparkContext.setLogLevel("ERROR")
 
   // Reading the DataFrame from source File
-  val stackDF_unamed = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
-  val dfColumnsName = Seq("show_id", "type", "title", "director", "cast", "country", "date_added",
-    "release_year", "rating", "duration", "listed_in", "description")
-  val stackDF = stackDF_unamed.toDF(dfColumnsName.seq:_*)
-  println(stackDF.printSchema())
+  val netflixDF = spark.read.option("inferSchema", "true").option("header", "true").csv("resources/netflix_titles.csv")
+  println(netflixDF.printSchema())
+
   // TODO :)
+  println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
 }
