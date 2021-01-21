@@ -1,10 +1,10 @@
 import java.util.Dictionary
-
 import main.{netflixDF, spark}
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.desc
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
+
 
 object Utils {
   def compare_type(df : DataFrame) : List[(String, Long)] = {
