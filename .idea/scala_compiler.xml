@@ -2,5 +2,8 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <profile name="sbt 1" modules="spark-netflix" />
+    <profile name="sbt 2" modules="Spark-Netflix">
+      <option name="deprecationWarnings" value="true" />
+    </profile>
   </component>
 </project>
