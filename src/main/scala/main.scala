@@ -1,6 +1,5 @@
-import org.apache.spark.sql.{SparkSession}
-
-
+import org.apache.spark.sql.SparkSession
+import Utils._
 object main extends App {
   // Defining the spark Session
   val spark = SparkSession
@@ -17,7 +16,6 @@ object main extends App {
   println(netflixDF.printSchema())
 
   // TODO :)
-
-  // MOYENNE Duree Film / Serie
   println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
+  println(mostDirector(netflixDF))
 }
