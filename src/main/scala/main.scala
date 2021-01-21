@@ -1,7 +1,5 @@
-import Utils._
 import org.apache.spark.sql.SparkSession
-
-
+import Utils._
 object main extends App {
   // Defining the spark Session
   val spark = SparkSession
