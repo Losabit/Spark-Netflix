@@ -1,41 +1,36 @@
-import java.util.Dictionary
-
-import main.{netflixDF, spark}
-import org.apache.spark.SparkContext
-import org.apache.spark.rdd.RDD
+import main.spark
 import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.functions.desc
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 
+import scala.::
+
 
 object Utils {
-  def divideCommas(column: String,df: DataFrame) : DataFrame = {
+
+  def divideCommas(column: String,df: DataFrame,dfColumns: Array[String]) : DataFrame = {
     df.foreach(row => {
-      if(row.getAs[String](column).contains(",")){
-        val columnToReinsert = row.getAs[String](column).split(",")
+      val columnToDivide = row.getAs[String](column)
+      if(columnToDivide != null && columnToDivide.contains(",")){
+        val columnToReinsert = columnToDivide.split(",")
         columnToReinsert.foreach(el => {
 
-          val columnVal = List.empty[String]
-          df.printSchema()
-          df.show(20)
-          df.columns.foreach(col => {
+          var columnVal = Seq[String]()
+
+          dfColumns.foreach(col => {
             if(col != column){
-              columnVal :+ row.getAs[String](col)
+              columnVal = columnVal :+ row.getAs[String](col)
             }else{
-              columnVal :+ el
+              columnVal = columnVal :+ el
             }
           })
 
-          val schema = StructType(
-            df.columns.map(fieldName => StructField(fieldName, StringType,true))
-           )
-
-          val lineToInsertRdd = spark.sparkContext.parallelize(columnVal)
-
-          val row2ToInsertRdd : RDD[Row] = lineToInsertRdd.map(line =>
-            Row.fromSeq(line.split(','))
+          import spark.implicits._
+          var lineToInsert = columnVal.toDF(
+            "show_id", "type", "title", "director", "cast", "country", "date_added",
+              "release_year", "rating", "duration", "listed_in", "description"
           )
-          //df.union(spark.createDataFrame(,schema))
+          df.union(lineToInsert)
         })
       }
     })
