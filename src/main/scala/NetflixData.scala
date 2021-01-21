@@ -1,7 +1,7 @@
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{mean, regexp_replace}
 
-class NetflixData {
+object NetflixData {
 
   val showTypes = List("TV Show","Movie")
 
