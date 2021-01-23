@@ -1,5 +1,5 @@
-import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import Utils._
+import org.apache.spark.sql.{Dataset, SparkSession}
 
 object main extends App {
   // Defining the spark Session
@@ -18,7 +18,8 @@ object main extends App {
 
   val dataset :  Dataset[(String,String)] = Utils.fieldToList(netflixDF, 5)
   //.withColumnRenamed("_1", "id").withColumnRenamed("_2", "director")
-  println(mostElem(dataset,"country"))
+  println(mostElem(dataset, "country"))
+  getMostRatedType(netflixDF)
 /*
   println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
   println(mostDirector(netflixDF))

@@ -1,17 +1,14 @@
-import main.{dataset, netflixDF, spark}
-import org.apache.spark.sql.{DataFrame, Dataset, Row}
+import main.spark.implicits._
+import main.{netflixDF, spark}
 import org.apache.spark.sql.functions.desc
-import spark.implicits._
-import org.apache.spark.sql.types.{StringType, StructField, StructType}
-
-import scala.::
+import org.apache.spark.sql.{DataFrame, Dataset}
 
 
 object Utils {
-  def fieldToList(df: DataFrame, col : Int): Dataset[(String,String)]  = {
-    val dataset : Dataset[(String,List[String])] = netflixDF.map{
+  def fieldToList(df: DataFrame, col: Int): Dataset[(String, String)] = {
+    val dataset: Dataset[(String, List[String])] = netflixDF.map {
       row => {
-        if(row != null && row.get(0) != null && row.get(col) != null)
+        if (row != null && row.get(0) != null && row.get(col) != null)
           (row.getString(0), row.getString(col).split(',').toList)
         else
           ("-1",List())
@@ -57,15 +54,20 @@ object Utils {
     df
   }
 
-  def mostElem(df : Dataset[(String,String)],colName:String): String = {
-    var newDf = renameColumn(df,colName)
+  def mostElem(df: Dataset[(String, String)], colName: String): String = {
+    var newDf = renameColumn(df, colName)
     var finalCountry = newDf.select("*").groupBy(colName).count().orderBy(desc("count"))
-    return  finalCountry.first().getString(0)
+    return finalCountry.first().getString(0)
   }
 
-
-  def renameColumn(dataset: Dataset[(String,String)], column: String):DataFrame = {
-    var dt  =dataset.withColumnRenamed("_1", "id").withColumnRenamed("_2", column)
+  def renameColumn(dataset: Dataset[(String, String)], column: String): DataFrame = {
+    var dt = dataset.withColumnRenamed("_1", "id").withColumnRenamed("_2", column)
     dt
+  }
+
+  def getMostRatedType(dataFrame: DataFrame): String = {
+    var df = dataFrame.select("rating", "type").groupBy("type").count().orderBy(desc("count")).limit(2)
+    var finalDf = df.withColumnRenamed("count", "totalRating")
+    return finalDf.first().getString(0)
   }
 }
