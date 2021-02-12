@@ -20,7 +20,6 @@ object main extends App {
   println(mostElem(dataset, "country"))
   println("---------------------------------------")
   // Le type le mieux noté
-  println()
   println("Le type  le mieux noté  : ")
   println(getMostRatedType(netflixDF))
 
@@ -36,6 +35,14 @@ object main extends App {
   println("Temps moyen d'un show   : ")
   println(NetflixData.averageShowDuration(NetflixData.showTypes(1),netflixDF))
   println("---------------------------------------")
+
   println(NetflixData.typeIteration(netflixDF))
+  println("---------------------------------------")
+  println("Older film : ")
+  val datasetOlder :  Dataset[(String,String)] = Utils.fieldToList(netflixDF, 7)
+  println(getOlder(datasetOlder,"release_year"))
+  println("Le plus recent  film : ")
+  println(getNew(datasetOlder,"release_year"))
+
 
 }

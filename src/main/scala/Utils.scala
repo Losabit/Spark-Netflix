@@ -1,6 +1,6 @@
 import main.spark.implicits._
 import main.{netflixDF, spark}
-import org.apache.spark.sql.functions.desc
+import org.apache.spark.sql.functions.{asc, desc}
 import org.apache.spark.sql.{DataFrame, Dataset}
 
 
@@ -59,6 +59,19 @@ object Utils {
     var finalCountry = newDf.select("*").groupBy(colName).count().orderBy(desc("count"))
     return finalCountry.first().getString(0)
   }
+  def getOlder(df: Dataset[(String, String)], colName: String): String = {
+    var newDf = renameColumn(df, colName)
+    var older = newDf.select("*").where("release_year != 'United States' AND  id ='s4868'" ).orderBy(asc(colName))
+   // older.show()
+    return older.first().getString(1)
+  }
+  def getNew(df: Dataset[(String, String)], colName: String): String = {
+    var newDf = renameColumn(df, colName)
+    var older = newDf.select("*").where("release_year != 'United States' AND release_year > 2020" ).orderBy(asc(colName))
+//    older.show()
+    return older.first().getString(1)
+  }
+
 
   def renameColumn(dataset: Dataset[(String, String)], column: String): DataFrame = {
     var dt = dataset.withColumnRenamed("_1", "id").withColumnRenamed("_2", column)
